@@ -17,7 +17,7 @@ def validate_credits(credits):
   except (ValueError, TypeError):
     raise InvalidCreditsErr(f"credits have to be a whole number, not '{credits}'")
   if credits <Min_creds or credits> Max_creds:
-    raise InvalidCreditsErr(f"credits have to be {Min_creds}-{Max_creds}(you put {credits}")
+    raise InvalidCreditsErr(f"credits have to be {Min_creds}-{Max_creds}(you put {credits})")
   return credits
 
 def calculate_gpa(points, credits):
@@ -131,7 +131,7 @@ class Student:
   def remove_semester(self, term_name):
     semester = self.find_semester(term_name)
     if semester is None:
-      raise SemesterNotFoundErr(f" no semester called {term_name}")
+      raise SemesterNotFoundErr(f"no semester called {term_name}")
     self.semesters.remove(semester)
     return semester
 
@@ -141,7 +141,7 @@ class Student:
       courses.extend(semester.courses)
     return courses
 
-  def total_credits(self)
+  def total_credits(self):
     total = 0
     for semester in self.semesters:
         total += semester.total_credits()
@@ -163,21 +163,21 @@ class Student:
     return calculate_gpa(self.quality_points(), self.total_credits())
 
   def what_if_gpa(self, planned):
-      # planned = list of (credits, letter) tuples for classes you haven't taken yet
-      # returns the gpa you'd have after those classes
-      points = self.quality_points()
-      credits = self.total_credits()
-      for planned_credits, letter in planned:
-        points += letter_to_points(letter) * planned_credits
-        credits += planned_credits
-      return calculate_gpa(points, credits)
+    # planned = list of (credits, letter) tuples for classes you haven't taken yet
+    # returns the gpa you'd have after those classes
+    points = self.quality_points()
+    credits = self.total_credits()
+    for planned_credits, letter in planned:
+      points += letter_to_points(letter) * planned_credits
+      credits += planned_credits
+    return calculate_gpa(points, credits)
 
   def standing(self):
     gpa = self.cumulative_gpa()
     if gpa is None:
       return "No grades yet"
     if gpa < 2.0:
-      return " Below 2.0 - could be put on academic probation"
+      return "Below 2.0 - could be put on academic probation"
     if gpa >= 3.5:
       return "Good standing (Dean's List range)"
     return "Good standing"
