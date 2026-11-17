@@ -53,7 +53,7 @@ class Course:
     return (self.name, self.credits, self.letter)
 
   def __str__(self):
-    return f" {self.name} ({self.credits} cr), self.letter)"
+    return f"{self.name} ({self.credits} cr) - {self.letter}"
     
 class Semester
   def __init__(self, term_name):
@@ -95,6 +95,18 @@ None:
       total += course.quality_points()
     return total
 
+  def earned_credits(self):
+    total = 0
+    for course in self.courses:
+      total += course.earned_credits()
+    return total
+
+  def gpa(self):
+    return calculate_gpa(self.quality_points(), self.total_credits())
+
+  def __str__(self):
+    return f"{self.term_name} ({len(self.courses)} courses)"
+    
 class Student:
   def __init__(self, name):
     name = str(name).strip()
@@ -137,5 +149,40 @@ class Student:
         total += semester.total_credits()
     return total
 
+  def quality_points(self):
+    total = 0.0
+    for semester in self.semesters:
+      total += semester.quality_points()
+    return total
+
+  def earned_credits(self):
+    total = 0
+    for semester in self.semesters:
+      total += semester.earned_credits()
+    return total
+
+  def cumukative_gpa(self):
+    return calculate_gpa(self.quality_points(), self.total_credits())
+
+  def what_if_gpa(self, planned)
+      # planned = list of (credits, letter) tuples for classes you haven't taken yet
+      #returns the gpa you'd have after those classes
+      points = self.quality_points()
+      credits - self.total_credits()
+      for planned_credits, letter in planned:
+        points += letter_to_points(letter) * planned_credits
+        credits += planned credits
+      return claculate_gpa(points,credits)
+
+  def standing(self):
+    gpa = self.cumulative_gpa()
+    if gpa is None:
+      return "No grades yet"
+    if gpa < 2.0:
+      return " Below 2.0 - could be put on academic probation"
+    if gpa >= 3.5:
+      return "Good standing (Dean's List range)"
+    return "Good standing"
+  
 
     
