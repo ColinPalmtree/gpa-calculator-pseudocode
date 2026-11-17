@@ -5,11 +5,11 @@
 # gpa = total quality points / total credits
 # quality points = grade points* credits
 
-from errors import (InvalidCreditErr, DuplicateCourseErr, DuplicateSemesterErr, CourseNotFoundErr, SemesterNotFoundErr)
+from errors import (InvalidCreditsErr, DuplicateCourseErr, DuplicateSemesterErr, CourseNotFoundErr, SemesterNotFoundErr)
 from grades import letter_to_points, parse_grade, is_passing
 
-Min_cred = 1
-Max_cred = 6
+Min_creds = 1
+Max_creds = 6
 
 def validate_credits(credits):
   try:
@@ -21,7 +21,7 @@ def validate_credits(credits):
   return credits
 
 def calculate_gpa(points, credits):
-  if credits == 0 ;
+  if credits == 0 :
     return None # can't divide by 0
   return points / credits
   
@@ -29,7 +29,7 @@ class Course:
   def __init__(self, name, credits, grade):
     name = str(name).strip()
     if name == "":
-      raise ValueError("Course name can't be blank"}
+      raise ValueError("Course name can't be blank")
     self.name = name
     self.credits = validate_credits(credits)
     self.letter = parse_grade(grade)
@@ -45,7 +45,7 @@ class Course:
 
   def earned_credits(self):
     # you don't get the credits if you fail
-    if is_passing(self,letter):
+    if is_passing(self.letter):
       return self.credits
     return 0
 
@@ -55,7 +55,7 @@ class Course:
   def __str__(self):
     return f"{self.name} ({self.credits} cr) - {self.letter}"
     
-class Semester
+class Semester:
   def __init__(self, term_name):
     term_name = str(term_name).strip()
     if term_name == "":
@@ -78,7 +78,7 @@ class Semester
   def remove_course(self, course_name):
     course = self.find_course(course_name)
     if course is None:
-      raise CourseNotFoundEr(f"No course called {course_name} in {self.term_name}")
+      raise CourseNotFoundErr(f"No course called {course_name} in {self.term_name}")
     self.courses.remove(course)
     return course
 
@@ -122,26 +122,26 @@ class Student:
     return None
 
   def add_semester(self, term_name):
-    if self.find_semester(term_name is not None:
+    if self.find_semester(term_name) is not None:
       raise DuplicateSemesterErr(f"{term_name} already exists")
     semester = Semester(term_name)
     self.semesters.append(semester)
     return semester
 
-  def remove_semester(self, term_names):
+  def remove_semester(self, term_name):
     semester = self.find_semester(term_name)
     if semester is None:
       raise SemesterNotFoundErr(f" no semester called {term_name}")
-      self.semesters.remove(semester)
+    self.semesters.remove(semester)
     return semester
 
-  def all courses(self):
+  def all_courses(self):
     courses = []
     for semester in self.semesters:
       courses.extend(semester.courses)
     return courses
 
-  def total credits(self)
+  def total_credits(self)
     total = 0
     for semester in self.semesters:
         total += semester.total_credits()
@@ -162,14 +162,14 @@ class Student:
   def cumulative_gpa(self):
     return calculate_gpa(self.quality_points(), self.total_credits())
 
-  def what_if_gpa(self, planned)
+  def what_if_gpa(self, planned):
       # planned = list of (credits, letter) tuples for classes you haven't taken yet
       # returns the gpa you'd have after those classes
       points = self.quality_points()
-      credits - self.total_credits()
+      credits = self.total_credits()
       for planned_credits, letter in planned:
         points += letter_to_points(letter) * planned_credits
-        credits += planned credits
+        credits += planned_credits
       return calculate_gpa(points, credits)
 
   def standing(self):
