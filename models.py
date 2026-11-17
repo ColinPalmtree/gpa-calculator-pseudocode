@@ -42,6 +42,18 @@ class Course:
 
   def quality_points(self):
     return self.grade_points() * self.credits
+
+  def earned_credits(self):
+    #you don't get the credits if you fail
+    if is_passing(self,letter):
+      return self.credits
+    return 0
+
+  def to_record(self):
+    return (self.name, self.credits, self.letter)
+
+  def __str__(self):
+    return f" {self.name} ({self.credits} cr), self.letter)"
     
 class Semester
   def __init__(self, term_name):
@@ -63,6 +75,7 @@ class Semester
 None:
       raise DuplicateCourseErr(f"{course.name} is already in {self.term_name}")
     self.courses.append(course)
+    
   def remove_course(self, course_name):
     course = self.find_course(course_name)
     if course is None:
